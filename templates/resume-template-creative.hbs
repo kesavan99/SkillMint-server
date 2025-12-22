@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{personalInfo.name}} - Resume</title>
+  <style>
+    /* Reset for this template only */
+    #resume-creative * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    #resume-creative {
+      font-family: 'Arial', 'Helvetica', sans-serif;
+      line-height: 1.5;
+      color: #333;
+      background: #fff;
+      font-size: 10.5pt;
+    }
+
+    #resume-creative .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 50px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #f8f9fa;
+    }
+
+    #resume-creative .resume-wrapper {
+      background: #fff;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* Header Section with Gradient */
+    #resume-creative .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 35px 40px;
+      text-align: center;
+    }
+
+    #resume-creative .header h1 {
+      font-size: 28pt;
+      margin-bottom: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    #resume-creative .contact-info {
+      font-size: 10pt;
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    #resume-creative .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    #resume-creative .contact-info a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* Main Content */
+    #resume-creative .content {
+      padding: 35px 40px;
+    }
+
+    /* Section Styles */
+    #resume-creative .section {
+      margin-bottom: 30px;
+    }
+
+    #resume-creative .section-title {
+      font-size: 13pt;
+      color: #667eea;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    #resume-creative .section-icon {
+      font-size: 16pt;
+    }
+
+    /* Profile/Summary */
+    #resume-creative .summary {
+      color: #555;
+      font-size: 10pt;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      text-align: justify;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 3px solid #667eea;
+    }
+
+    /* Skills with Progress Bars */
+    #resume-creative .skills-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    #resume-creative .skill-item {
+      margin-bottom: 8px;
+    }
+
+    #resume-creative .skill-name {
+      font-size: 9.5pt;
+      color: #333;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #resume-creative .skill-level {
+      font-size: 8pt;
+      color: #999;
+    }
+
+    #resume-creative .skill-bar {
+      height: 6px;
+      background: #e9ecef;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    #resume-creative .skill-progress {
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 3px;
+    }
+
+    /* Experience with Visual Elements */
+    #resume-creative .experience-item {
+      margin-bottom: 25px;
+      padding-left: 25px;
+      border-left: 2px solid #e9ecef;
+      position: relative;
+    }
+
+    .experience-item:before {
+      content: "●";
+      position: absolute;
+      left: -6px;
+      top: 0;
+      color: #667eea;
+      font-size: 12pt;
+    }
+
+    #resume-creative .experience-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      align-items: baseline;
+    }
+
+    #resume-creative .job-title {
+      font-weight: 600;
+      font-size: 11pt;
+      color: #667eea;
+    }
+
+    #resume-creative .duration {
+      font-size: 9pt;
+      color: #999;
+      background: #f8f9fa;
+      padding: 3px 10px;
+      border-radius: 3px;
+    }
+
+    #resume-creative .company {
+      font-size: 10pt;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    #resume-creative .experience-item ul {
+      margin-left: 20px;
+      margin-top: 6px;
+    }
+
+    #resume-creative .experience-item li {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    /* Education with Icons */
+    #resume-creative .education-item {
+      margin-bottom: 18px;
+      display: flex;
+      gap: 15px;
+      align-items: start;
+    }
+
+    #resume-creative .education-icon {
+      font-size: 24pt;
+      color: #667eea;
+    }
+
+    #resume-creative .education-content {
+      flex: 1;
+    }
+
+    #resume-creative .institution {
+      font-weight: 600;
+      font-size: 11pt;
+      color: #333;
+    }
+
+    #resume-creative .degree-year {
+      font-size: 10pt;
+      color: #666;
+      margin-top: 3px;
+    }
+
+    /* Projects with Cards */
+    #resume-creative .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    #resume-creative .project-card {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      border-top: 3px solid #667eea;
+    }
+
+    #resume-creative .project-name {
+      font-weight: 600;
+      font-size: 10.5pt;
+      color: #667eea;
+      margin-bottom: 8px;
+    }
+
+    #resume-creative .project-desc {
+      font-size: 9.5pt;
+      line-height: 1.5;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    #resume-creative .project-tech {
+      font-size: 9pt;
+      color: #999;
+      font-style: italic;
+    }
+
+    /* Certifications with Badges */
+    #resume-creative .cert-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #resume-creative .cert-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 9pt;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Stats Box */
+    #resume-creative .stats-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    #resume-creative .stat-item {
+      text-align: center;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    #resume-creative .stat-value {
+      font-size: 18pt;
+      font-weight: 700;
+      display: block;
+    }
+
+    #resume-creative .stat-label {
+      font-size: 9pt;
+      margin-top: 5px;
+      opacity: 0.9;
+    }
+
+    @media print {
+      #resume-creative .page-break {
+        page-break-before: always;
+      }
+      #resume-creative .container {
+        background: #fff;
+      }
+      #resume-creative .resume-wrapper {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="resume-creative">
+  <div class="container">
+    <div class="resume-wrapper">
+      <!-- Header -->
+      <div class="header">
+        <h1>{{personalInfo.name}}</h1>
+        <div class="contact-info">
+          <div class="contact-item">📧 {{personalInfo.email}}</div>
+          <div class="contact-item">📱 {{personalInfo.phone}}</div>
+          {{#if personalInfo.location}}
+          <div class="contact-item">📍 {{personalInfo.location}}</div>
+          {{/if}}
+          {{#if personalInfo.linkedin}}
+          <div class="contact-item">🔗 <a href="{{personalInfo.linkedin}}">LinkedIn</a></div>
+          {{/if}}
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content">
+        <!-- Profile/Summary -->
+        {{#if summary}}
+        <div class="section">
+          <h2 class="section-title">
+            <span class="section-icon">👤</span>
+            About Me
+          </h2>
+          <p class="summary">{{summary}}</p>
+        </div>
+        {{/if}}
+
+        <!-- Skills -->
+        {{#if skills}}
+        <div class="section">
+          <h2 class="section-title">
+            <span class="section-icon">⚡</span>
+            Skills
+          </h2>
+          <div class="skill-name">
+            {{#each skills}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+          </div>
+        </div>
+        {{/if}}
+
+        <!-- Experience -->
+        {{#if experience}}
+        <div class="section">
+          <h2 class="section-title">
+            <span class="section-icon">💼</span>
+            Work Experience
+          </h2>
+          {{#each experience}}
+          <div class="experience-item">
+            <div class="experience-header">
+              <span class="job-title">{{title}}</span>
+              <span class="duration">{{duration}}</span>
+            </div>
+            <div class="company">{{company}}</div>
+            <ul>
+              <li>{{description}}</li>
+            </ul>
+          </div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        <!-- Projects -->
+        {{#if projects}}
+        <div class="section">
+          <h2 class="section-title">
+            <span class="section-icon">🚀</span>
+            Featured Projects
+          </h2>
+          <div class="projects-grid">
+            {{#each projects}}
+            <div class="project-card">
+              <div class="project-name">{{name}}</div>
+              <div class="project-desc">{{description}}</div>
+              {{#if technologies}}
+              <div class="project-tech">🔧 {{technologies}}</div>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+        </div>
+        {{/if}}
+
+        <!-- Education -->
+        {{#if education}}
+        <div class="section">
+          <h2 class="section-title">
+            <span class="section-icon">🎓</span>
+            Education
+          </h2>
+          {{#each education}}
+          <div class="education-item">
+            <div class="education-icon">🎓</div>
+            <div class="education-content">
+              <div class="institution">{{institution}}</div>
+              <div class="degree-year">{{degree}} | {{year}}</div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        <!-- Certifications -->
+        {{#if certifications}}
+        <div class="section">
+          <h2 class="section-title">
+            <span class="section-icon">🏆</span>
+            Certifications
+          </h2>
+          <div class="cert-grid">
+            {{#each certifications}}
+            <div class="cert-badge">✓ {{this}}</div>
+            {{/each}}
+          </div>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+</html>
