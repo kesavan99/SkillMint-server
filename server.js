@@ -9,7 +9,6 @@ const resumeRoutes = require('./routes/resumeRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const contactRoutes = require('./routes/contactRoutes');
-const jobRoutes = require('./routes/jobRoutes');
 const mongooseConnection = require('./models/mongooseConnection');
 const nocache = require("nocache");
 
@@ -88,7 +87,6 @@ app.use('/skill-mint/admin', adminRoutes);
 app.use('/skill-mint/resume', resumeRoutes);
 app.use('/api/resume', resumeRoutes);
 app.use('/api/contact', contactRoutes);
-app.use('/api/jobs', jobRoutes);
 
 app.get('/', (req, res) => {
   console.log(`Server is wake up`);
