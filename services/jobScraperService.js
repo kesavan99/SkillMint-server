@@ -27,14 +27,14 @@ class JobScraperService {
       // Build search URL
       const searchUrl = this.buildSearchUrl({ keyword, location, experience });
 
-      // Navigate to search page
+      // Navigate to search page with longer timeout and less strict wait condition
       await page.goto(searchUrl, {
-        waitUntil: 'networkidle2',
-        timeout: 30000
+        waitUntil: 'domcontentloaded', // Less strict than networkidle2
+        timeout: 60000 // Increased from 30s to 60s for Render.com
       });
 
-      // Wait a bit more for dynamic content (using setTimeout since waitForTimeout is deprecated)
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Wait for dynamic content to load
+      await new Promise(resolve => setTimeout(resolve, 5000));
 
       // Wait for job listings to load - use actual Naukri selector
       const jobListFound = await Promise.race([
