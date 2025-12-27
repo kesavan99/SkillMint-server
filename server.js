@@ -27,8 +27,8 @@ const allowedOrigins = [
   'https://skillhubtools.store',
   'http://skillhubtools.store',
   'https://www.skillhubtools.store',
-  'http://localhost:8080',
-  'http://localhost:3000'
+  // 'http://localhost:8080',
+  // 'http://localhost:3000'
 ];
 
 const corsOptions = {
