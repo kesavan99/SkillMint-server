@@ -133,5 +133,3 @@ process.on('SIGINT', async () => {
 startServer();
 
 module.exports = app;
-
-module.exports = app;
