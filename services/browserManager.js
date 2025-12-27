@@ -52,11 +52,7 @@ class BrowserManager {
         ]
       };
 
-      // Use bundled Chromium on production (Render.com)
-      if (process.env.NODE_ENV === 'production') {
-        launchOptions.executablePath = '/usr/bin/chromium-browser';
-      }
-
+      // Puppeteer will use bundled Chromium (installed via postinstall script)
       this.browser = await puppeteer.launch(launchOptions);
 
       // Handle browser disconnection
