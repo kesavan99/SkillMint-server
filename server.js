@@ -11,8 +11,9 @@ const adminRoutes = require('./routes/adminRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const jobRoutes = require('./routes/jobRoutes');
 const mongooseConnection = require('./models/mongooseConnection');
-const jobScraperService = require('./services/jobScraperService');
 const nocache = require("nocache");
+const browserManager = require('./services/browserManager');
+const tabManager = require('./services/tabManager');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,8 +27,8 @@ const allowedOrigins = [
   'https://skillhubtools.store',
   'http://skillhubtools.store',
   'https://www.skillhubtools.store',
-  // 'http://localhost:8080',
-  // 'http://localhost:3000'
+  'http://localhost:8080',
+  'http://localhost:3000'
 ];
 
 const corsOptions = {
@@ -104,9 +105,8 @@ const startServer = async () => {
     // Connect to MongoDB
     await mongooseConnection.connect();
     
-    // Initialize Puppeteer browser once on server startup
-    console.log('Initializing browser for job scraping...');
-    await jobScraperService.initializeBrowser();
+    // Initialize browser for job scraping (launches once)
+    await browserManager.initialize();
     
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server is running on port ${PORT}`);
@@ -117,19 +117,21 @@ const startServer = async () => {
   }
 };
 
-// Graceful shutdown - close browser when server stops
+startServer();
+
+// Graceful shutdown
 process.on('SIGTERM', async () => {
-  console.log('SIGTERM signal received: closing HTTP server and browser');
-  await jobScraperService.closeBrowser();
+  console.log('SIGTERM received, shutting down gracefully...');
+  await tabManager.closeAllTabs();
+  await browserManager.close();
   process.exit(0);
 });
 
 process.on('SIGINT', async () => {
-  console.log('SIGINT signal received: closing HTTP server and browser');
-  await jobScraperService.closeBrowser();
+  console.log('SIGINT received, shutting down gracefully...');
+  await tabManager.closeAllTabs();
+  await browserManager.close();
   process.exit(0);
 });
-
-startServer();
 
 module.exports = app;

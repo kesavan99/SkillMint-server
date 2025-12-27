@@ -2,8 +2,7 @@ const jobScraperService = require('../../services/jobScraperService');
 
 /**
  * Job Search Controller
- * Handles job search requests and web scraping
- * Each user gets a dedicated browser tab that is reused for all their searches
+ * Handles job search requests using Puppeteer (browser automation)
  */
 
 /**
@@ -32,41 +31,39 @@ const searchJobs = async (req, res) => {
       });
     }
 
-    console.log(`Job search request from user: ${userId.substring(0, 8)}...`);
+    const keyword = role || designation;
+    const searchLocation = location || 'India';
 
-    // Perform job search using scraper service with userId
-    const jobs = await jobScraperService.searchJobs({
-      userId,
-      role,
-      designation,
-      experienceLevel,
-      location,
-      jobType
+    // Use Puppeteer to scrape jobs
+    const result = await jobScraperService.searchJobs(userId.toString(), {
+      keyword: keyword,
+      location: searchLocation,
+      experience: experienceLevel
     });
+
+    if (!result.success) {
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to fetch jobs',
+        error: result.error
+      });
+    }
 
     return res.status(200).json({
       success: true,
       message: 'Jobs retrieved successfully',
-      count: jobs.length,
-      data: jobs
+      count: result.data.jobs.length,
+      totalJobs: result.data.totalJobs,
+      data: result.data.jobs,
+      searchUrl: result.data.searchUrl
     });
 
   } catch (error) {
-    console.error('Error in searchJobs controller:', error);
-    
-    // Provide user-friendly error message
-    let errorMessage = 'Failed to search for jobs';
-    if (error.message && error.message.includes('blocking cloud hosting')) {
-      errorMessage = 'Job search is temporarily unavailable. Naukri.com is blocking requests from this server.';
-    } else if (error.message && error.message.includes('Navigation timeout')) {
-      errorMessage = 'Job search is temporarily unavailable. Unable to connect to Naukri.com.';
-    } else if (error.message && error.message.includes('User ID is required')) {
-      errorMessage = 'User authentication required for job search';
-    }
+    console.error('❌ Error in searchJobs controller:', error);
     
     return res.status(500).json({
       success: false,
-      message: errorMessage,
+      message: 'Failed to search for jobs',
       error: error.message
     });
   }
@@ -107,21 +104,23 @@ const getJobDetails = async (req, res) => {
 };
 
 /**
- * Health check endpoint for job service
+ * Health check endpoint
  * GET /api/jobs/health
  */
 const healthCheck = async (req, res) => {
   try {
-    const stats = jobScraperService.getStats();
+    const tabManager = require('../../services/tabManager');
+    const browserManager = require('../../services/browserManager');
+    
+    const tabStats = tabManager.getStats();
+    const browserStatus = browserManager.getStatus();
     
     return res.status(200).json({
       success: true,
-      message: 'Job search service is running',
+      message: 'Job search service is running (Puppeteer-based)',
       timestamp: new Date().toISOString(),
-      stats: {
-        activeUserTabs: stats.totalUsers,
-        browserInitialized: stats.browserInitialized
-      }
+      browser: browserStatus,
+      tabs: tabStats
     });
   } catch (error) {
     return res.status(500).json({
@@ -131,40 +130,8 @@ const healthCheck = async (req, res) => {
   }
 };
 
-/**
- * Close user's tab (optional endpoint for cleanup)
- * POST /api/jobs/close-tab
- */
-const closeUserTab = async (req, res) => {
-  try {
-    const userId = req.user?.userId || req.user?.id;
-    
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: 'User authentication required'
-      });
-    }
-    
-    await jobScraperService.closeUserTab(userId);
-    
-    return res.status(200).json({
-      success: true,
-      message: 'User tab closed successfully'
-    });
-  } catch (error) {
-    console.error('Error closing user tab:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to close tab',
-      error: error.message
-    });
-  }
-};
-
 module.exports = {
   searchJobs,
   getJobDetails,
-  healthCheck,
-  closeUserTab
+  healthCheck
 };

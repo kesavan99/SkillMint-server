@@ -3,6 +3,7 @@ const DataParser = require('../../utils/dataParser');
 const JWTUtils = require('../../utils/jwtUtils');
 const { ERROR_CODES } = require('../../constants/errorCodes');
 const crypto = require('crypto');
+const tabManager = require('../../services/tabManager');
 
 class AuthController {
   static async login(req, res) {
@@ -113,6 +114,11 @@ class AuthController {
         }
 
         res.cookie('token', token, cookieOpts);
+        
+        // Create user tab for job scraping (async, don't wait)
+        tabManager.createUserTab(existingUser._id.toString()).catch(err => {
+          console.error('Error creating user tab:', err);
+        });
         
         return res.status(200).json({
           status: 'success',
@@ -253,6 +259,11 @@ class AuthController {
 
       res.cookie('token', token, cookieOpts);
       
+      // Create user tab for job scraping (async, don't wait)
+      tabManager.createUserTab(result.data.id).catch(err => {
+        console.error('Error creating user tab:', err);
+      });
+      
       return res.status(200).json({
         status: 'success',
         message: 'Google login successful',
@@ -284,6 +295,16 @@ class AuthController {
 
   static async logout(req, res) {
   try {
+    // Get userId from JWT token (set by authMiddleware)
+    const userId = req.user?.userId || req.user?.id;
+    
+    // Close user's tab (async, don't block logout)
+    if (userId) {
+      tabManager.closeUserTab(userId.toString()).catch(err => {
+        console.error('Error closing user tab on logout:', err);
+      });
+    }
+    
     const isProduction = process.env.NODE_ENV === 'production';
     const clearOpts = {
       httpOnly: true,

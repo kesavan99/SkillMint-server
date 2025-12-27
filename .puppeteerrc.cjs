@@ -1,8 +1,9 @@
 const { join } = require('path');
 
 /**
- * Puppeteer configuration for Render.com
- * Specifies custom cache directory for browser downloads
+ * Puppeteer configuration for Render.com deployment
+ * Uses local cache directory to avoid permission issues
+ * @type {import("puppeteer").Configuration}
  */
 module.exports = {
   cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
