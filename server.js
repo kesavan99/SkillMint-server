@@ -9,7 +9,9 @@ const resumeRoutes = require('./routes/resumeRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const jobRoutes = require('./routes/jobRoutes');
 const mongooseConnection = require('./models/mongooseConnection');
+const jobScraperService = require('./services/jobScraperService');
 const nocache = require("nocache");
 
 const app = express();
@@ -87,6 +89,7 @@ app.use('/skill-mint/admin', adminRoutes);
 app.use('/skill-mint/resume', resumeRoutes);
 app.use('/api/resume', resumeRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/jobs', jobRoutes);
 
 app.get('/', (req, res) => {
   console.log(`Server is wake up`);
@@ -98,7 +101,12 @@ app.get('/', (req, res) => {
 
 const startServer = async () => {
   try {
+    // Connect to MongoDB
     await mongooseConnection.connect();
+    
+    // Initialize Puppeteer browser once on server startup
+    console.log('Initializing browser for job scraping...');
+    await jobScraperService.initializeBrowser();
     
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server is running on port ${PORT}`);
@@ -109,6 +117,21 @@ const startServer = async () => {
   }
 };
 
+// Graceful shutdown - close browser when server stops
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM signal received: closing HTTP server and browser');
+  await jobScraperService.closeBrowser();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  console.log('SIGINT signal received: closing HTTP server and browser');
+  await jobScraperService.closeBrowser();
+  process.exit(0);
+});
+
 startServer();
+
+module.exports = app;
 
 module.exports = app;
