@@ -1,0 +1,24 @@
+# Render.com deployment configuration
+services:
+  - type: web
+    name: skill-mint-server
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false  # Set this in Render.com dashboard
+      - key: MONGODB_DB_NAME
+        value: skill-mint
+      - key: PORT
+        value: 3000
+      - key: GEMINI_API_KEY
+        sync: false  # Set this in Render.com dashboard
+      - key: GEMINI_MODEL_ID
+        value: gemini-2.0-flash
+      - key: GEMINI_MODEL_FALLBACKS
+        value: gemini-2.5-flash,gemini-2.5-flash-lite,gemma-3-27b,gemma-3-12b,gemma-3-4b,gemma-3-2b
+      - key: GEMINI_API_VERSION
+        value: v1beta

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{personalInfo.name}} - Resume</title>
+  <style>
+    /* Reset for this template only */
+    #resume-skills-first * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    #resume-skills-first {
+      font-family: 'Arial', 'Helvetica', sans-serif;
+      line-height: 1.5;
+      color: #333;
+      background: #fff;
+      font-size: 10.5pt;
+    }
+
+    #resume-skills-first .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 50px;
+    }
+
+    /* Header Section */
+    #resume-skills-first .header {
+      margin-bottom: 30px;
+    }
+
+    #resume-skills-first .header h1 {
+      font-size: 26pt;
+      color: #1e3a8a;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    #resume-skills-first .contact-info {
+      font-size: 10pt;
+      color: #666;
+    }
+
+    #resume-skills-first .contact-info a {
+      color: #1e3a8a;
+      text-decoration: none;
+    }
+
+    /* Section Styles */
+    #resume-skills-first .section {
+      margin-bottom: 28px;
+    }
+
+    #resume-skills-first .section-title {
+      font-size: 13pt;
+      color: #1e3a8a;
+      font-weight: 600;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #1e3a8a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Profile/Summary */
+    #resume-skills-first .summary {
+      color: #444;
+      font-size: 10pt;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    /* Skills Section - Highlighted */
+    #resume-skills-first .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    #resume-skills-first .skill-category {
+      background: #f0f4ff;
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 3px solid #1e3a8a;
+    }
+
+    #resume-skills-first .skill-category-title {
+      font-weight: 600;
+      font-size: 10pt;
+      color: #1e3a8a;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    #resume-skills-first .skill-items {
+      font-size: 9.5pt;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    /* Core Skills Highlight Box */
+    #resume-skills-first .core-skills {
+      background: #1e3a8a;
+      color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 25px;
+    }
+
+    #resume-skills-first .core-skills h3 {
+      font-size: 12pt;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    #resume-skills-first .core-skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #resume-skills-first .core-skill-tag {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 5px 12px;
+      border-radius: 3px;
+      font-size: 9.5pt;
+      font-weight: 500;
+    }
+
+    /* Experience */
+    #resume-skills-first .experience-item {
+      margin-bottom: 20px;
+    }
+
+    #resume-skills-first .experience-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    #resume-skills-first .job-title {
+      font-weight: 600;
+      font-size: 11pt;
+      color: #1e3a8a;
+    }
+
+    #resume-skills-first .duration {
+      font-size: 9.5pt;
+      color: #666;
+      font-style: italic;
+    }
+
+    #resume-skills-first .company {
+      font-size: 10pt;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    #resume-skills-first .experience-item ul {
+      margin-left: 20px;
+      margin-top: 6px;
+    }
+
+    #resume-skills-first .experience-item li {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin-bottom: 5px;
+      color: #444;
+    }
+
+    /* Education */
+    #resume-skills-first .education-item {
+      margin-bottom: 15px;
+    }
+
+    #resume-skills-first .education-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+
+    #resume-skills-first .institution {
+      font-weight: 600;
+      font-size: 10.5pt;
+      color: #1e3a8a;
+    }
+
+    #resume-skills-first .year {
+      font-size: 9.5pt;
+      color: #666;
+    }
+
+    #resume-skills-first .degree {
+      font-size: 10pt;
+      color: #666;
+    }
+
+    /* Projects */
+    #resume-skills-first .project-item {
+      margin-bottom: 18px;
+    }
+
+    #resume-skills-first .project-name {
+      font-weight: 600;
+      font-size: 10.5pt;
+      color: #1e3a8a;
+      margin-bottom: 5px;
+    }
+
+    #resume-skills-first .project-item ul {
+      margin-left: 20px;
+      margin-top: 5px;
+    }
+
+    #resume-skills-first .project-item li {
+      font-size: 10pt;
+      line-height: 1.5;
+      margin-bottom: 4px;
+      color: #444;
+    }
+
+    /* Certifications */
+    #resume-skills-first .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    #resume-skills-first .cert-item {
+      background: #f0f4ff;
+      padding: 8px 12px;
+      border-radius: 3px;
+      font-size: 9.5pt;
+      color: #333;
+      border-left: 2px solid #1e3a8a;
+    }
+
+    @media print {
+      #resume-skills-first .page-break {
+        page-break-before: always;
+      }
+      #resume-skills-first .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="resume-skills-first">
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>{{personalInfo.name}}</h1>
+      <div class="contact-info">
+        {{personalInfo.phone}} • {{personalInfo.email}}{{#if personalInfo.location}} • {{personalInfo.location}}{{/if}}{{#if personalInfo.linkedin}} • <a href="{{personalInfo.linkedin}}">LinkedIn Profile</a>{{/if}}
+      </div>
+    </div>
+
+    <!-- Core Skills Highlight -->
+    {{#if skills}}
+    <div class="core-skills">
+      <h3>Core Technical Skills</h3>
+      <div class="core-skills-list">
+        {{#each skills}}
+        <span class="core-skill-tag">{{this}}</span>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+
+    <!-- Profile/Summary -->
+    {{#if summary}}
+    <div class="section">
+      <h2 class="section-title">Professional Profile</h2>
+      <p class="summary">{{summary}}</p>
+    </div>
+    {{/if}}
+
+    <!-- Skills Breakdown -->
+    {{#if skills}}
+    <div class="section">
+      <h2 class="section-title">Technical Competencies</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <div class="skill-category-title">Programming</div>
+          <div class="skill-items">JavaScript, Python, Java, TypeScript</div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-category-title">Frameworks</div>
+          <div class="skill-items">React, Node.js, Express, Angular</div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-category-title">Tools & Platforms</div>
+          <div class="skill-items">Git, Docker, AWS, MongoDB</div>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+
+    <!-- Experience -->
+    {{#if experience}}
+    <div class="section">
+      <h2 class="section-title">Professional Experience</h2>
+      {{#each experience}}
+      <div class="experience-item">
+        <div class="experience-header">
+          <span class="job-title">{{title}}</span>
+          <span class="duration">{{duration}}</span>
+        </div>
+        <div class="company">{{company}}</div>
+        <ul>
+          <li>{{description}}</li>
+        </ul>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    <!-- Projects -->
+    {{#if projects}}
+    <div class="section">
+      <h2 class="section-title">Key Projects</h2>
+      {{#each projects}}
+      <div class="project-item">
+        <div class="project-name">{{name}}</div>
+        <ul>
+          <li>{{description}}</li>
+          {{#if technologies}}
+          <li>Technologies: {{technologies}}</li>
+          {{/if}}
+        </ul>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    <!-- Education -->
+    {{#if education}}
+    <div class="section">
+      <h2 class="section-title">Education</h2>
+      {{#each education}}
+      <div class="education-item">
+        <div class="education-header">
+          <span class="institution">{{institution}}</span>
+          <span class="year">{{year}}</span>
+        </div>
+        <div class="degree">{{degree}}</div>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    <!-- Certifications -->
+    {{#if certifications}}
+    <div class="section">
+      <h2 class="section-title">Certifications</h2>
+      <div class="cert-grid">
+        {{#each certifications}}
+        <div class="cert-item">{{this}}</div>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+  </div>
+</body>
+</html>
