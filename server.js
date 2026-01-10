@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -46,6 +47,10 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Serve static files (robots.txt, etc.)
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(helmet());
 app.use(nocache());
 app.use(helmet.noSniff());

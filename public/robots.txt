@@ -1,0 +1,5 @@
+# robots.txt for api.skillhubtools.store
+User-agent: *
+Disallow: /
+
+# This is an API server, not meant for crawling
