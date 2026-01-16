@@ -22,6 +22,9 @@ const getProfile = async (req, res) => {
         phone: user.phone || '',
         profilePicture: user.profilePicture || '',
         lastLogin: user.lastLogin || null,
+        credit: user.credit !== undefined ? user.credit : 2,
+        aiLimit: user.aiLimit !== undefined ? user.aiLimit : 3,
+        plan: user.plan !== undefined ? user.plan : 1,
         details: {
           designation: user.details?.designation || 'N/A',
           areaOfInterest: user.details?.areaOfInterest || 'N/A'
@@ -83,6 +86,7 @@ const updateProfile = async (req, res) => {
         phone: user.phone || '',
         profilePicture: user.profilePicture || '',
         lastLogin: user.lastLogin || null,
+        credit: user.credit !== undefined ? user.credit : 5,
         details: {
           designation: user.details.designation,
           areaOfInterest: user.details.areaOfInterest

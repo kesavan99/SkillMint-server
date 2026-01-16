@@ -11,6 +11,7 @@ const profileRoutes = require('./routes/profileRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const jobRoutes = require('./routes/jobRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 const mongooseConnection = require('./models/mongooseConnection');
 const nocache = require("nocache");
 
@@ -62,14 +63,26 @@ app.use((req, res, next) => {
       req.path === "/skill-mint/resume/saved" || 
       req.path === "/api/resume/saved" ||
       req.path === "/api/jobs/search" ||
-      req.path.startsWith("/api/jobs/search/poll/")) {
+      req.path.startsWith("/api/jobs/search/poll/") ||
+      req.path === "/api/payment/webhook") {  // Exclude Razorpay webhook from rate limiting
     return next();
   }
   return normalLimiter(req, res, next);
 });
 
 app.use(cookieParser());
-app.use(express.json({ limit: '50mb' })); // Increased limit for base64 images
+
+// Parse JSON for all routes EXCEPT webhook (webhook needs raw body for signature verification)
+app.use((req, res, next) => {
+  if (req.path === '/api/payment/webhook') {
+    return next();
+  }
+  express.json({ limit: '50mb' })(req, res, next);
+});
+
+// Raw body parser for webhook route (needed for Razorpay signature verification)
+app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
+
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(
   helmet.contentSecurityPolicy({
@@ -96,6 +109,7 @@ app.use('/skill-mint/resume', resumeRoutes);
 app.use('/api/resume', resumeRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/jobs', jobRoutes);
+app.use('/api/payment', paymentRoutes);
 
 app.get('/', (req, res) => {
   console.log(`Server is wake up`);

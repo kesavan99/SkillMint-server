@@ -76,6 +76,20 @@ class UserService {
         user.isActive = true; // Make sure user is active
         user.status = 'active'; // Set status to active
         
+        // Check if aiLimit needs to be reset (new day)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const lastResetDate = user.aiLimitResetDate ? new Date(user.aiLimitResetDate) : null;
+        if (lastResetDate) {
+          lastResetDate.setHours(0, 0, 0, 0);
+        }
+        
+        // Reset aiLimit to 3 if it's a new day
+        if (!lastResetDate || lastResetDate.getTime() < today.getTime()) {
+          user.aiLimit = 3;
+          user.aiLimitResetDate = new Date();
+        }
+        
         // Check if user needs to set password (no password OR inactive account)
         needsPassword = !user.password || user.password === '';
         

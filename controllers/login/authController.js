@@ -87,6 +87,21 @@ class AuthController {
         // Update lastLogin and increment loginCount
         existingUser.lastLogin = new Date();
         existingUser.loginCount = (existingUser.loginCount || 0) + 1;
+        
+        // Check if aiLimit needs to be reset (new day)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const lastResetDate = existingUser.aiLimitResetDate ? new Date(existingUser.aiLimitResetDate) : null;
+        if (lastResetDate) {
+          lastResetDate.setHours(0, 0, 0, 0);
+        }
+        
+        // Reset aiLimit to 3 if it's a new day
+        if (!lastResetDate || lastResetDate.getTime() < today.getTime()) {
+          existingUser.aiLimit = 3;
+          existingUser.aiLimitResetDate = new Date();
+        }
+        
         await existingUser.save();
         
         // Generate JWT token

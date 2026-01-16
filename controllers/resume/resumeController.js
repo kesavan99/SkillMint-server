@@ -192,6 +192,17 @@ exports.saveResume = async (req, res) => {
         });
       }
 
+      // Check if user has enough credit for editing
+      const userCredit = user.credit !== undefined ? user.credit : 2;
+      if (userCredit <= 0) {
+        return res.status(403).json({
+          success: false,
+          error: 'Insufficient credit',
+          message: 'You do not have enough credits to save this resume. Please purchase more credits.',
+          credit: 0
+        });
+      }
+
       user.resumeDetails[resumeIndex] = {
         resumeId,
         resumeName: resumeName.trim(),
@@ -201,6 +212,9 @@ exports.saveResume = async (req, res) => {
         isDynamic: isDynamic, // Store isDynamic flag
         resumeFormat: resumeFormat // Store resume format
       };
+
+      // Deduct 1 credit for saving/updating resume
+      user.credit = userCredit - 1;
 
       await user.save();
 
@@ -213,11 +227,23 @@ exports.saveResume = async (req, res) => {
           generatedDate: user.resumeDetails[resumeIndex].generatedDate,
           templateName: template,
           isDynamic: isDynamic,
-          resumeFormat: resumeFormat
+          resumeFormat: resumeFormat,
+          credit: user.credit
         }
       });
     } else {
       // Create new resume with random ID
+      // Check if user has enough credit
+      const userCredit = user.credit !== undefined ? user.credit : 2;
+      if (userCredit <= 0) {
+        return res.status(403).json({
+          success: false,
+          error: 'Insufficient credit',
+          message: 'You do not have enough credits to create a new resume. Please purchase more credits.',
+          credit: 0
+        });
+      }
+
       const crypto = require('crypto');
       const newResumeId = `resume_${crypto.randomBytes(8).toString('hex')}_${Date.now()}`;
 
@@ -232,6 +258,9 @@ exports.saveResume = async (req, res) => {
         resumeFormat: resumeFormat // Store resume format
       });
 
+      // Deduct 1 credit for creating new resume
+      user.credit = userCredit - 1;
+
       await user.save();
 
       return res.status(200).json({
@@ -244,7 +273,8 @@ exports.saveResume = async (req, res) => {
           generatedDate: user.resumeDetails[user.resumeDetails.length - 1].generatedDate,
           templateName: user.resumeDetails[user.resumeDetails.length - 1].templateName,
           isDynamic: isDynamic,
-          resumeFormat: resumeFormat
+          resumeFormat: resumeFormat,
+          credit: user.credit
         }
       });
     }

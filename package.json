@@ -38,6 +38,7 @@
     "pdf-parse": "^1.1.1",
     "pdf-to-img": "^5.0.0",
     "prettier": "^3.6.2",
+    "razorpay": "^2.9.6",
     "tesseract.js": "^7.0.0",
     "uuid": "^13.0.0"
   },

@@ -82,6 +82,26 @@ const userSchema = new mongoose.Schema({
     min: 0,
     required: true
   },
+  credit: {
+    type: Number,
+    default: 2,
+    min: 0
+  },
+  aiLimit: {
+    type: Number,
+    default: 3,
+    min: 0
+  },
+  aiLimitResetDate: {
+    type: Date,
+    default: Date.now
+  },
+  plan: {
+    type: Number,
+    default: 1,
+    min: 1,
+    max: 3
+  },
   jobSearchLimitExtensionRequest: {
     requested: {
       type: Boolean,
