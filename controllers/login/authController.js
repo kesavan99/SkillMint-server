@@ -35,6 +35,19 @@ class AuthController {
         const verificationToken = crypto.randomBytes(32).toString('hex');
         const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
         
+        // Handle referral code if provided
+        let referrerUser = null;
+        if (rawData.referralCode) {
+          try {
+            referrerUser = await UserService.findUserById(rawData.referralCode);
+            if (!referrerUser) {
+              console.log('Invalid referral code provided:', rawData.referralCode);
+            }
+          } catch (error) {
+            console.log('Error validating referral code:', error.message);
+          }
+        }
+        
         // Create user with status = 'inactive' and isActive = false
         const userData = {
           email: cleanData.email,
@@ -45,10 +58,24 @@ class AuthController {
           isActive: false,
           status: 'inactive',
           verificationToken,
-          verificationTokenExpires
+          verificationTokenExpires,
+          referredBy: referrerUser ? referrerUser._id : null,
+          credit: referrerUser ? 4 : 2 // Give 2 extra credits if referred (2 default + 2 bonus)
         };
         
         const result = await UserService.createUser(userData);
+        
+        // If valid referrer, add 2 credits to the referrer
+        if (referrerUser) {
+          try {
+            await UserService.updateUser(referrerUser._id, {
+              credit: referrerUser.credit + 2,
+              referralCreditsEarned: (referrerUser.referralCreditsEarned || 0) + 2
+            });
+          } catch (error) {
+            console.error('Error updating referrer credits:', error);
+          }
+        }
         
         return res.status(201).json({
           status: 'success',

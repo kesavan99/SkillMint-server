@@ -87,6 +87,16 @@ const userSchema = new mongoose.Schema({
     default: 2,
     min: 0
   },
+  referredBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
+  referralCreditsEarned: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
   aiLimit: {
     type: Number,
     default: 3,

@@ -16,7 +16,9 @@ class UserService {
         ...(apiData.verificationToken && { verificationToken: apiData.verificationToken }),
         ...(apiData.verificationTokenExpires && { verificationTokenExpires: apiData.verificationTokenExpires }),
         ...(apiData.googleId && { googleId: apiData.googleId }),
-        ...(apiData.profilePicture && { profilePicture: apiData.profilePicture })
+        ...(apiData.profilePicture && { profilePicture: apiData.profilePicture }),
+        ...(apiData.referredBy && { referredBy: apiData.referredBy }),
+        ...(apiData.credit !== undefined && { credit: apiData.credit })
       };
       
       const user = new User(userData);
@@ -160,6 +162,18 @@ class UserService {
   static async findUserByEmail(email) {
     try {
       const user = await User.findOne({ email: email.toLowerCase() });
+      return user;
+    } catch (error) {
+      const customError = new Error(ERROR_MESSAGES.ERC5);
+      customError.code = ERROR_CODES.ERC5;
+      customError.originalError = error;
+      throw customError;
+    }
+  }
+
+  static async findUserById(userId) {
+    try {
+      const user = await User.findById(userId);
       return user;
     } catch (error) {
       const customError = new Error(ERROR_MESSAGES.ERC5);
