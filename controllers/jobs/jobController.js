@@ -251,7 +251,7 @@ const processJobSearch = async (taskId, userId, keyword, searchLocation, experie
       searchLocation, 
       experienceLevel || 0,
       1, // Start from page 1
-      1,  // Fetch 1 page (10 results per page, consumes 1 API request)
+      5,  // Fetch 5 pages (10 results per page = 50 jobs, consumes 1 API request)
       company,
       platform
     );

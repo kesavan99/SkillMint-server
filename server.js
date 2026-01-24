@@ -12,6 +12,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const jobRoutes = require('./routes/jobRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const atsRoutes = require('./routes/atsRoutes');
 const mongooseConnection = require('./models/mongooseConnection');
 const nocache = require("nocache");
 
@@ -63,6 +64,7 @@ app.use((req, res, next) => {
       req.path === "/skill-mint/resume/saved" || 
       req.path === "/api/resume/saved" ||
       req.path === "/api/jobs/search" ||
+      req.path === "/api/jobs/quota" ||
       req.path.startsWith("/api/jobs/search/poll/") ||
       req.path === "/api/payment/webhook") {  // Exclude Razorpay webhook from rate limiting
     return next();
@@ -110,6 +112,7 @@ app.use('/api/resume', resumeRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/ats', atsRoutes);
 
 app.get('/', (req, res) => {
   console.log(`Server is wake up`);
